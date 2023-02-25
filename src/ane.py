@@ -38,6 +38,9 @@ class ANE_MODEL:
 
 	def register(self):
 		assert(self.input_count and self.output_count)
+		if (self.input_count > 1): raise ValueError("todo")
+		assert(self.input_count == len(self.input_nchw))
+		assert(self.output_count == len(self.output_nchw) == len(self.output_size))
 		self.outputs = [None] * self.output_count
 		for n in range(self.output_count):
 			self.outputs[n] = ctypes.create_string_buffer(self.output_size[n])
