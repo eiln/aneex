@@ -48,6 +48,19 @@ class ANE_MODEL:
 		self.execf.argtypes = [c_void_p] * (1 + self.input_count + self.output_count)
 		self.ane.init(self)
 
+	def __repr__(self):
+		out = []
+		out.append("model: %s" % (self.__class__.__name__.lower()))
+		out.append("  inputs: %d" % (self.input_count))
+		for n in range(self.input_count):
+			nchw = self.input_nchw[n]
+			out.append("    input[%d]: (%d, %d, %d, %d)" % (n, nchw[0], nchw[1], nchw[2], nchw[3]))
+		out.append("  outputs: %d" % (self.output_count))
+		for n in range(self.output_count):
+			nchw = self.output_nchw[n]
+			out.append("    output[%d]: (%d, %d, %d, %d)" % (n, nchw[0], nchw[1], nchw[2], nchw[3]))
+		return '\n'.join(out)
+
 	def predict(self, inputs):
 		err = self.execf(self.handle, *inputs, *[pointer(output) for output in self.outputs])
 		return self.outputs
