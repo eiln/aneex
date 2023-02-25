@@ -38,7 +38,6 @@ class ANE_MODEL:
 
 	def register(self):
 		assert(self.input_count and self.output_count)
-		if (self.input_count > 1): raise ValueError("todo")
 		assert(self.input_count == len(self.input_nchw))
 		assert(self.output_count == len(self.output_nchw) == len(self.output_size))
 		self.outputs = [None] * self.output_count
@@ -49,8 +48,8 @@ class ANE_MODEL:
 		self.execf.argtypes = [c_void_p] * (1 + self.input_count + self.output_count)
 		self.ane.init(self)
 
-	def predict(self, input):
-		err = self.execf(self.handle, input, *[pointer(output) for output in self.outputs])
+	def predict(self, inputs):
+		err = self.execf(self.handle, *inputs, *[pointer(output) for output in self.outputs])
 		return self.outputs
 
 	def nchw_tile(self, arr, nchw):
@@ -70,8 +69,8 @@ class ANE_MODEL:
 		arr = arr.reshape((new_N, new_C, new_H, new_W))[:N, :C, :H, :W]
 		return arr
 
-	def tile(self, arr, n=0):
-		return self.nchw_tile(arr, self.input_nchw[n])
+	def tile(self, arrs):
+		return [self.nchw_tile(arrs[n], self.input_nchw[n]) for n in range(self.input_count)]
 
 	def untile(self, outputs):
 		return [self.nchw_untile(outputs[n], self.output_nchw[n]) for n in range(self.output_count)]
