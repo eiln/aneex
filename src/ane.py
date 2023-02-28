@@ -15,7 +15,6 @@ def round_up(x, y):
 class ANE:
 	def __init__(self, path="/home/eileen/aneex/compile/pyane.so"):
 		self.lib = ctypes.cdll.LoadLibrary(path)
-		print(self.lib)
 		self.handles = {}
 		atexit.register(self.cleanup)
 
