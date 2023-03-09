@@ -1,3 +1,4 @@
+#!/usr/bin/bash
 
 > pyane.c
 echo "#include \"pyane.h\"" >> pyane.c

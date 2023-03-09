@@ -9,8 +9,9 @@ __pycache__/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+*.tmp
 *.out
 *.o
 *.anec
-*.tmp
-tmp/*
+anec_*.h
+*.hwx

@@ -1,4 +1,3 @@
-
 CFLAGS = -I. -Wall -Werror
 LIBS = -I/usr/include/libdrm \
 	-I/home/eileen/ane/ane/src/include \
@@ -9,7 +8,7 @@ BUILD_DIR = /home/eileen/ane/build
 .PHONY: pyane clean
 
 pyane:
-	bash compile.sh
+	bash gen_anec.sh
 	gcc -shared -pthread -fPIC -fno-strict-aliasing \
 		$(CFLAGS) $(LIBS) -I/usr/include/python3.10 \
 		$(BUILD_DIR)/anelib.o \

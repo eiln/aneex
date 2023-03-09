@@ -64,3 +64,46 @@
 		inputs=[ct.TensorType(name='x', shape=input_batch.shape)])
 	mlmodel.save("fcn.mlmodel")
 
+
+
+##### atan2
+
+	import torch
+	import torch.nn as nn
+
+	class Atan2(nn.Module):
+	    def __init__(self):
+	        super(Atan2, self).__init__()
+	    def forward(self, x, y):
+	        x = torch.atan2(x, y)
+	        return x
+	model = Atan2().eval()
+
+	input = [torch.rand(1024, 2048), torch.rand(1024, 2048)]  # use correct shape
+	trace = torch.jit.trace(model, input)
+	mlmodel = ct.convert(trace, inputs=[ct.TensorType(name="x", shape=input[0].shape),
+	                                   ct.TensorType(name="y", shape=input[1].shape)])
+
+
+
+##### matmul
+
+	from coremltools.converters.mil import Builder as mb
+
+	@mb.program(input_specs=[mb.TensorSpec(shape=(1024, 2048)), mb.TensorSpec(shape=(2048, 4096)),])
+	def matmul(x, y):
+	    x = mb.matmul(x=x, y=y)
+	    return x
+	mlmodel = ct.convert(matmul)
+
+
+##### sqrt
+
+	from coremltools.converters.mil import Builder as mb
+
+	@mb.program(input_specs=[mb.TensorSpec(shape=(1024, 2048))])
+	def sqrt(x):
+	    x = mb.sqrt(x=x)
+	    return x
+	mlmodel = ct.convert(sqrt)
+

@@ -13,7 +13,7 @@ def round_up(x, y):
 
 
 class ANE:
-	def __init__(self, path="/home/eileen/aneex/compile/pyane.so"):
+	def __init__(self, path="/home/eileen/aneex/vision/compile/pyane.so"):
 		self.lib = ctypes.cdll.LoadLibrary(path)
 		self.lib.pyane_free.argtypes = [c_void_p]
 		self.lib.pyane_exec.argtypes = [c_void_p, c_void_p, c_void_p]
