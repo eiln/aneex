@@ -26,9 +26,10 @@ class ANE:
 
 	def init(self, model):
 		handle = model.initf()
-		if (handle == None): raise RuntimeError("uh oh")
+		if (handle == None): raise RuntimeError("driver error")
 		self.handles[handle] = 0
 		model.handle = handle
+
 
 class ANE_MODEL:
 	def __init__(self, ane):
@@ -48,7 +49,7 @@ class ANE_MODEL:
 
 	def predict(self, inputs):
 		inputs_p = (c_char_p * len(inputs))(*inputs)
-		outputs = [c_char_p(addressof(output)) for output in self.outputs]
+		outputs = [c_char_p(addressof(self.outputs[n])) for n in range(self.output_count)]
 		outputs_p = (c_char_p * len(outputs))(*outputs)
 		err = self.ane.lib.pyane_exec(self.handle, inputs_p, outputs_p)
 		return self.outputs
@@ -70,9 +71,8 @@ class ANE_MODEL:
 		arr = arr.reshape((new_N, new_C, new_H, new_W))[:N, :C, :H, :W]
 		return arr
 
-	def tile(self, arrs):
-		return [self.nchw_tile(arrs[n], self.input_nchw[n]) for n in range(self.input_count)]
+	def tile(self, inarrs):
+		return [self.nchw_tile(inarrs[n], self.input_nchw[n]) for n in range(self.input_count)]
 
 	def untile(self, outputs):
 		return [self.nchw_untile(outputs[n], self.output_nchw[n]) for n in range(self.output_count)]
-
