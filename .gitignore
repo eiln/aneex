@@ -13,3 +13,4 @@ __pycache__/
 *.o
 *.anec
 *.tmp
+tmp/*

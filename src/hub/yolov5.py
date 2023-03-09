@@ -19,9 +19,7 @@ class YOLOV5(ANE_MODEL):
 		self.output_nchw = [(1, 1, 15552, 85, 0x2d9000, 0xc0),
 				    (1, 1, 3888, 85, 0xb6400, 0xc0),
 				    (1, 1, 972, 85, 0x2d900, 0xc0)]
-		self.initf = self.ane.lib.pyane_yolov5_init
-		self.freef = self.ane.lib.pyane_yolov5_free
-		self.execf = self.ane.lib.pyane_yolov5_exec
+		self.initf = self.ane.lib.pyane_init_yolov5
 		self.register()
 
 	def preprocess(self, img):

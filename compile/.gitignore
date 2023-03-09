@@ -1,8 +1,5 @@
 anec_*.h
-pyane_*.h
 *.anec
 *.o
 *.hwx
-pyane.c
 hwx.tar.gz
-

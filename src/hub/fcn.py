@@ -17,9 +17,7 @@ class FCN(ANE_MODEL):
 		self.output_size = [0x100000]
 		self.input_nchw = [(1, 3, 1026, 1282, 0x291480, 0xa40)]
 		self.output_nchw = [(1, 21, 129, 161, 0xc180, 0x180)]
-		self.initf = self.ane.lib.pyane_fcn_init
-		self.freef = self.ane.lib.pyane_fcn_free
-		self.execf = self.ane.lib.pyane_fcn_exec
+		self.initf = self.ane.lib.pyane_init_fcn
 		self.register()
 
 	def preprocess(self, img):

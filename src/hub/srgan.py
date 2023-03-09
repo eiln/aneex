@@ -17,9 +17,7 @@ class SRGAN(ANE_MODEL):
 		self.output_size = [0x1800000]
 		self.input_nchw = [(1, 3, 512, 512, 0x80000, 0x400)]
 		self.output_nchw = [(1, 3, 2048, 2048, 0x800000, 0x1000)]
-		self.initf = self.ane.lib.pyane_srgan_init
-		self.freef = self.ane.lib.pyane_srgan_free
-		self.execf = self.ane.lib.pyane_srgan_exec
+		self.initf = self.ane.lib.pyane_init_srgan
 		self.register()
 
 	def preprocess(self, img):

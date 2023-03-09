@@ -2,7 +2,7 @@
 # Copyright 2022 Eileen Yoon <eyn@gmx.com>
 
 import ctypes
-from ctypes import c_void_p, pointer
+from ctypes import c_void_p, c_char_p, pointer, addressof
 
 import atexit
 import numpy as np
@@ -15,24 +15,25 @@ def round_up(x, y):
 class ANE:
 	def __init__(self, path="/home/eileen/aneex/compile/pyane.so"):
 		self.lib = ctypes.cdll.LoadLibrary(path)
+		self.lib.pyane_free.argtypes = [c_void_p]
+		self.lib.pyane_exec.argtypes = [c_void_p, c_void_p, c_void_p]
 		self.handles = {}
 		atexit.register(self.cleanup)
 
 	def cleanup(self):
 		for handle in self.handles:
-			self.handles[handle](handle)
+			self.lib.pyane_free(handle)
 
 	def init(self, model):
 		handle = model.initf()
 		if (handle == None): raise RuntimeError("uh oh")
-		self.handles[handle] = model.freef
+		self.handles[handle] = 0
 		model.handle = handle
-		return handle
-
 
 class ANE_MODEL:
 	def __init__(self, ane):
 		self.ane = ane
+		self.initf = None
 		self.handle = None
 
 	def register(self):
@@ -43,25 +44,13 @@ class ANE_MODEL:
 		for n in range(self.output_count):
 			self.outputs[n] = ctypes.create_string_buffer(self.output_size[n])
 		self.initf.restype = c_void_p
-		self.freef.argtypes = [c_void_p]
-		self.execf.argtypes = [c_void_p] * (1 + self.input_count + self.output_count)
 		self.ane.init(self)
 
-	def __repr__(self):
-		out = []
-		out.append("model: %s" % (self.__class__.__name__.lower()))
-		out.append("  inputs: %d" % (self.input_count))
-		for n in range(self.input_count):
-			nchw = self.input_nchw[n]
-			out.append("    input[%d]: (%d, %d, %d, %d)" % (n, nchw[0], nchw[1], nchw[2], nchw[3]))
-		out.append("  outputs: %d" % (self.output_count))
-		for n in range(self.output_count):
-			nchw = self.output_nchw[n]
-			out.append("    output[%d]: (%d, %d, %d, %d)" % (n, nchw[0], nchw[1], nchw[2], nchw[3]))
-		return '\n'.join(out)
-
 	def predict(self, inputs):
-		err = self.execf(self.handle, *inputs, *[pointer(output) for output in self.outputs])
+		inputs_p = (c_char_p * len(inputs))(*inputs)
+		outputs = [c_char_p(addressof(output)) for output in self.outputs]
+		outputs_p = (c_char_p * len(outputs))(*outputs)
+		err = self.ane.lib.pyane_exec(self.handle, inputs_p, outputs_p)
 		return self.outputs
 
 	def nchw_tile(self, arr, nchw):
