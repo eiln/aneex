@@ -31,6 +31,7 @@
 	import cv2
 	import numpy as np
 	img = cv2.imread(filename)[:,:,::-1]
+	img = cv2.resize(img, (640, 640), interpolation=cv2.INTER_AREA)
 	input_image = Image.fromarray(img)
 
 

@@ -29,7 +29,7 @@
 [fcn](https://pytorch.org/vision/main/models/generated/torchvision.models.segmentation.fcn_resnet50.html) |
 [notebook](notebooks/fcn.ipynb)
 
-<img src="assets/fcn.jpg" width=70% height=70%>
+<img src="assets/fcn.jpg" width=60% height=60%>
 
 
 
