@@ -20,4 +20,4 @@ pyane:
 
 clean:
 	rm -f *.o *.so 
-	rm -f *.anec anec_*.h
+	rm -f *.anec anec_*.h pyane.c

@@ -3,3 +3,4 @@ anec_*.h
 *.o
 *.hwx
 hwx.tar.gz
+pyane.c
