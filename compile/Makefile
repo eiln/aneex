@@ -1,12 +1,10 @@
 
 CFLAGS = -I. -Wall -Werror
-
-ANE_DIR = /home/eileen/ane
-BUILD_DIR = /home/eileen/ane/build
-
 LIBS = -I/usr/include/libdrm \
-	-I$(ANE_DIR)/ane/src/include \
-	-I$(ANE_DIR)/anelib 
+	-I/home/eileen/ane/ane/src/include \
+	-I/home/eileen/ane/anelib/include
+
+BUILD_DIR = /home/eileen/ane/build
 
 .PHONY: pyane clean
 
